@@ -5,7 +5,7 @@
   "author": "Infinity",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "server": "nodemon server.js"
   },
   "dependencies": {
