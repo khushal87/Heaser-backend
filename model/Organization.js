@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
 
 const organizationSchema = new Schema({
   name: {
@@ -34,6 +35,15 @@ const organizationSchema = new Schema({
     type: String,
     required: false,
   },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
 });
+
+organizationSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("Organization", organizationSchema);
