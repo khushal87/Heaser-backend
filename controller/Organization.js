@@ -58,5 +58,3 @@ exports.deleteOrganization = (req, res, next) => {
       next(err);
     });
 };
-
-exports.createOrganization = (req, res, next) => {};

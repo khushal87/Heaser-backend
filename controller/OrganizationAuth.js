@@ -178,9 +178,7 @@ exports.changePassword = async (req, res, next) => {
       }
     })
     .then((result) => {
-      result
-        .status(200)
-        .json({ message: "User password changed successfully" });
+      res.status(200).json({ message: "User password changed successfully" });
     })
     .catch((error) => {
       if (!error.statusCode) {
