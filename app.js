@@ -20,8 +20,15 @@ const TimeRoutes = require("./routes/Time");
 //App initialization
 const app = express();
 
-const client = redis.createClient(6379);
-client.on("error", (error) => {
+// const client = redis.createClient(6379);
+let redisClient;
+if (process.env.REDISCLOUD_URL) {
+  let redisURL = url.parse(process.env.REDISCLOUD_URL);
+  redisClient = redis.createClient(redisURL);
+} else {
+  redisClient = redis.createClient();
+}
+redisClient.on("error", (error) => {
   console.log(error);
 });
 
