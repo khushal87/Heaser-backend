@@ -8,6 +8,7 @@ const cors = require("cors");
 const constants = require("./config/dev");
 const errorHandler = require("./middleware/error");
 const morgan = require("morgan");
+const redis = require("redis");
 const { v4: uuidv4 } = require("uuid");
 
 //App Routes
@@ -18,6 +19,12 @@ const TimeRoutes = require("./routes/Time");
 
 //App initialization
 const app = express();
+
+const client = redis.createClient(6379);
+client.on("error", (error) => {
+  console.log(error);
+});
+
 app.use(cors());
 
 const fileStorage = multer.diskStorage({
