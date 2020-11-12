@@ -14,6 +14,7 @@ const { v4: uuidv4 } = require("uuid");
 const OrganizationRoutes = require("./routes/Organization");
 const EmployeeRoutes = require("./routes/Employee");
 const TaskRoutes = require("./routes/Task");
+const TimeRoutes = require("./routes/Time");
 
 //App initialization
 const app = express();
@@ -80,6 +81,7 @@ app.use((req, res, next) => {
 app.use("/org", OrganizationRoutes);
 app.use("/employee", EmployeeRoutes);
 app.use("/task", TaskRoutes);
+app.use("/time", TimeRoutes);
 
 // //Handling error and response
 // app.use((error, req, res, next) => {
