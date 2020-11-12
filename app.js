@@ -8,7 +8,6 @@ const cors = require("cors");
 const constants = require("./config/dev");
 const errorHandler = require("./middleware/error");
 const morgan = require("morgan");
-const redis = require("redis");
 const { v4: uuidv4 } = require("uuid");
 
 //App Routes
@@ -19,18 +18,6 @@ const TimeRoutes = require("./routes/Time");
 
 //App initialization
 const app = express();
-
-// const client = redis.createClient(6379);
-let redisClient;
-if (process.env.REDISCLOUD_URL) {
-  let redisURL = url.parse(process.env.REDISCLOUD_URL);
-  redisClient = redis.createClient(redisURL);
-} else {
-  redisClient = redis.createClient();
-}
-redisClient.on("error", (error) => {
-  console.log(error);
-});
 
 app.use(cors());
 
