@@ -5,8 +5,8 @@ const Router = express.Router();
 
 Router.get("/get-employee-tasks/:id", taskController.getEmployeeTasks);
 Router.get(
-  "/get-tasks-by-employees/:id",
-  taskController.getTasksAllocatedByEmployee
+    "/get-tasks-by-employees/:id",
+    taskController.getTasksAllocatedByEmployee
 );
 Router.post("/create-task", taskController.createTask);
 Router.put("/update-task/:id", taskController.updateTask);

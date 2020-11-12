@@ -9,13 +9,13 @@ Router.post("/login", employeeAuthController.loginUser);
 Router.put("/change-password/:id", employeeAuthController.changePassword);
 
 Router.get(
-  "/get-employess-by-org-id/:id",
-  employeeController.getSpecificOrganizationsEmployee
+    "/get-employess-by-org-id/:id",
+    employeeController.getSpecificOrganizationsEmployee
 );
 
 Router.get(
-  "/get-specific-employee/:id",
-  employeeController.getSpecificEmployee
+    "/get-specific-employee/:id",
+    employeeController.getSpecificEmployee
 );
 
 Router.delete("/delete-employee/:id", employeeController.deleteEmployee);
