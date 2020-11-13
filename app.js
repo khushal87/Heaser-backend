@@ -15,6 +15,7 @@ const OrganizationRoutes = require("./routes/Organization");
 const EmployeeRoutes = require("./routes/Employee");
 const TaskRoutes = require("./routes/Task");
 const TimeRoutes = require("./routes/Time");
+const LeaveRoutes = require("./routes/Leave");
 
 //App initialization
 const app = express();
@@ -83,6 +84,7 @@ app.use("/org", OrganizationRoutes);
 app.use("/employee", EmployeeRoutes);
 app.use("/task", TaskRoutes);
 app.use("/time", TimeRoutes);
+app.use("/leave", LeaveRoutes);
 
 // //Handling error and response
 // app.use((error, req, res, next) => {

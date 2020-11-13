@@ -86,7 +86,7 @@ exports.createTask = async (req, res, next) => {
                         await task.save().then(async (result) => {
                             await res.status(200).json({
                                 message: "Task created successfully",
-                                organization: result,
+                                task: result,
                             });
                         });
                     }
@@ -119,12 +119,10 @@ exports.updateTask = async (req, res, next) => {
             await task.save();
         })
         .then(async (result) => {
-            await res
-                .status(200)
-                .json({
-                    message: "Updated task successfully!",
-                    result: result,
-                });
+            await res.status(200).json({
+                message: "Updated task successfully!",
+                result: result,
+            });
         })
         .catch((err) => {
             if (!err.statusCode) {
