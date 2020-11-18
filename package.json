@@ -5,7 +5,7 @@
   "author": "Infinity",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./bin/www",
     "server": "nodemon ./bin/www"
   },
   "dependencies": {
