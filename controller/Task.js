@@ -11,12 +11,14 @@ exports.getEmployeeTasks = async (req, res, next) => {
                 error.status = 404;
                 throw error;
             } else {
-                await Task.find({ to: id }).then((result) => {
-                    res.status(200).json({
-                        message: "Tasks fetched",
-                        tasks: result,
+                await Task.find({ to: id })
+                    .populate("from")
+                    .then((result) => {
+                        res.status(200).json({
+                            message: "Tasks fetched",
+                            tasks: result,
+                        });
                     });
-                });
             }
         })
         .catch((err) => {

@@ -9,11 +9,14 @@ class TaskCron {
 
     async sendTaskNotification() {
         return Cron.scheduleJob("00 00 00 * * *", async () => {
-            const currentDate = moment().format("L");
+            const currentDate = moment().format("YYYY-MM-DD");
+
             const task = await Task.find();
             const tasks = task.filter(
                 (item) =>
-                    item.startDate <= currentDate && currentDate <= item.endDate
+                    moment(item.startDate).format("YYYY-MM-DD") <=
+                        currentDate &&
+                    currentDate <= moment(item.endDate).format("YYYY-MM-DD")
             );
             tasks.map((item) => {
                 return Notification.create({
