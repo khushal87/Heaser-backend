@@ -1,4 +1,8 @@
 require("./db/conn");
+
+//cron jobs
+require("./job/Task");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -17,6 +21,7 @@ const TimeRoutes = require("./routes/Time");
 const LeaveRoutes = require("./routes/Leave");
 const AnnouncementRoutes = require("./routes/Announcement");
 const ChatRoutes = require("./routes/Chat");
+const NotificationRoutes = require("./routes/Notification");
 
 //App initialization
 const app = express();
@@ -88,6 +93,7 @@ app.use("/time", TimeRoutes);
 app.use("/leave", LeaveRoutes);
 app.use("/announcement", AnnouncementRoutes);
 app.use("/chat", ChatRoutes);
+app.use("/notification", NotificationRoutes);
 
 app.use(errorHandler);
 
