@@ -1,11 +1,10 @@
+require("./db/conn");
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const multer = require("multer");
 const cors = require("cors");
-const constants = require("./config/dev");
 const errorHandler = require("./middleware/error");
 const morgan = require("morgan");
 const { v4: uuidv4 } = require("uuid");
@@ -17,6 +16,7 @@ const TaskRoutes = require("./routes/Task");
 const TimeRoutes = require("./routes/Time");
 const LeaveRoutes = require("./routes/Leave");
 const AnnouncementRoutes = require("./routes/Announcement");
+const ChatRoutes = require("./routes/Chat");
 
 //App initialization
 const app = express();
@@ -61,12 +61,7 @@ app.use(
         storage: fileStorage,
         fileFilter: fileFilter,
         limits: { fileSize: 15728640 },
-    }).fields([
-        { name: "pan_attachment", maxCount: 1 },
-        { name: "gst_attachment", maxCount: 1 }, //need to be done 5
-        { name: "msme_attachment", maxCount: 1 },
-        { name: "bank_cancelled_cheque", maxCount: 1 },
-    ])
+    }).fields([{ name: "pan_attachment", maxCount: 1 }])
 );
 
 app.use(cookieParser());
@@ -81,39 +76,19 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/discuss", (req, res) => {
+    console.log("hey");
+    res.sendFile(path.join(__dirname, "view", "chat.html"));
+});
+
 app.use("/org", OrganizationRoutes);
 app.use("/employee", EmployeeRoutes);
 app.use("/task", TaskRoutes);
 app.use("/time", TimeRoutes);
 app.use("/leave", LeaveRoutes);
 app.use("/announcement", AnnouncementRoutes);
-
-// //Handling error and response
-// app.use((error, req, res, next) => {
-//   console.log(error);
-//   const status = error.statusCode || 500;
-//   const message = error.message;
-//   const data = error.data;
-//   res.status(status).json({ message: message, data: data });
-// });
+app.use("/chat", ChatRoutes);
 
 app.use(errorHandler);
-//Mongoose connection
-//LOCAL URL - mongodb://localhost:27017/test
 
-let port = process.env.PORT || 8080;
-mongoose
-    .connect(constants.mongoURI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false,
-    })
-    .then((result) => {
-        app.listen(port);
-    })
-    .then((res) => {
-        console.log("Hey we are good to go");
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+module.exports = app;

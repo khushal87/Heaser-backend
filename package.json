@@ -6,16 +6,18 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
-    "server": "nodemon app.js"
+    "server": "nodemon ./bin/www"
   },
   "dependencies": {
     "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "debug": "^4.2.0",
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
     "express-validator": "^6.6.1",
@@ -26,6 +28,8 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.4.14",
     "redis": "^3.0.2",
+    "request": "^2.88.2",
+    "socket.io": "^3.0.2",
     "uuid": "^8.3.1"
   },
   "devDependencies": {
