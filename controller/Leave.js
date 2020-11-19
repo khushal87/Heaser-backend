@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const Employee = require("../model/Employee");
 const Leave = require("../model/Leave");
+const Notification = require("../model/Notification");
 
 exports.getLeaves = (req, res, next) => {
     Leave.find()
@@ -84,8 +85,8 @@ exports.createLeave = async (req, res, next) => {
 exports.acceptLeave = async (req, res, next) => {
     const { leaveId, employee } = req.body;
     await Employee.findById(employee)
-        .then(async (result) => {
-            if (!result) {
+        .then(async (emp) => {
+            if (!emp) {
                 const error = new Error("Could not find employee.");
                 error.status = 404;
                 throw error;
@@ -99,6 +100,11 @@ exports.acceptLeave = async (req, res, next) => {
                         }
                         result.accepted = true;
                         result.accepted_by = employee;
+                        await Notification.create({
+                            message: `Your leave was accepted by ${emp.name}-${emp._id}`,
+                            operation: "Leave",
+                            actor: result.employee,
+                        });
                         return await result.save();
                     })
                     .then(async (result) => {

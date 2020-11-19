@@ -16,7 +16,8 @@ class TaskCron {
                 (item) =>
                     moment(item.startDate).format("YYYY-MM-DD") <=
                         currentDate &&
-                    currentDate <= moment(item.endDate).format("YYYY-MM-DD")
+                    currentDate <= moment(item.endDate).format("YYYY-MM-DD") &&
+                    !item.isCompleted
             );
             tasks.map((item) => {
                 return Notification.create({
