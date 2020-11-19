@@ -7,7 +7,11 @@ const messageSchema = new mongoose.Schema(
             required: true,
             ref: "Employee",
         },
-        to: { type: mongoose.Types.ObjectId, required: true, ref: "Employee" },
+        to: {
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: "Employee" || "Organization",
+        },
         text: { type: String, default: null },
         roomId: { type: String, default: null },
     },

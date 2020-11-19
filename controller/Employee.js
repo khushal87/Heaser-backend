@@ -11,7 +11,7 @@ exports.getSpecificOrganizationsEmployee = (req, res, next) => {
                 error.status = 404;
                 throw error;
             } else {
-                Employee.find().then((result) => {
+                Employee.find({ organization: orgId }).then((result) => {
                     res.status(200).json({
                         message: "Employees fetched",
                         data: result,

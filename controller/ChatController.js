@@ -2,12 +2,14 @@ const Employee = require("../model/Employee");
 const Message = require("../model/Message");
 
 exports.handlerUserIsOnline = async (empId) => {
+    console.log("Oh! HII");
     const empObj = await Employee.findById(empId);
     empObj["lastSeen"] = "Online";
     await empObj.save();
 };
 
 exports.handlerUserIsOffline = async (empId) => {
+    console.log("Oh! BYE");
     const empObj = await Employee.findById(empId);
     empObj["lastSeen"] = new Date().toLocaleString();
     await empObj.save();

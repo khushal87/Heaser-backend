@@ -26,7 +26,13 @@ const NotificationRoutes = require("./routes/Notification");
 //App initialization
 const app = express();
 
-app.use(cors());
+app.use(
+    cors({
+        origin: "*",
+        preflightContinue: true,
+        methods: "GET, HEAD, PUT, POST, DELETE",
+    })
+);
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {

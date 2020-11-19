@@ -24,6 +24,7 @@ const server = http.createServer(app);
 const io = require("socket.io")(server, {
     pingInterval: 6000000,
     pingTimeout: 6000000,
+    transports: ["websocket", "polling"],
 });
 
 require("../chat/index")(io);
