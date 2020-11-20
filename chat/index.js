@@ -29,7 +29,8 @@ module.exports = function (io) {
                 case "organization": {
                     messageHistory = await Message.find({
                         roomId: joinParams.roomId,
-                    }).sort({ _id: -1 });
+                    }).sort({ createdAt: 1 });
+                    console.log(messageHistory);
                     client.join(joinParams.roomId);
                     io.to(joinParams.roomId).emit(
                         "getChatHistory",
@@ -54,7 +55,7 @@ module.exports = function (io) {
                         client.join(joinParams.roomId);
                         messageHistory = await Message.find({
                             roomId: joinParams.roomId,
-                        }).sort({ _id: -1 });
+                        }).sort({ createdAt: 1 });
                         io.to(joinParams.roomId).emit(
                             "getChatHistory",
                             messageHistory
@@ -63,7 +64,7 @@ module.exports = function (io) {
                         client.join(reverseRoomId);
                         messageHistory = await Message.find({
                             roomId: reverseRoomId,
-                        }).sort({ _id: -1 });
+                        }).sort({ createdAt: 1 });
                         io.to(reverseRoomId).emit(
                             "getChatHistory",
                             messageHistory
@@ -73,7 +74,7 @@ module.exports = function (io) {
                         client.join(joinParams.roomId);
                         messageHistory = await Message.find({
                             roomId: joinParams.roomId,
-                        }).sort({ _id: -1 });
+                        }).sort({ createdAt: 1 });
                         io.to(joinParams.roomId).emit(
                             "getChatHistory",
                             messageHistory
@@ -87,7 +88,7 @@ module.exports = function (io) {
         client.on("chatMessage", async (obj) => {
             const empObj = await Employee.findById(obj.from);
             switch (obj.type) {
-                case "Organization": {
+                case "organization": {
                     io.to(obj.roomId).emit("newMessage", {
                         from: empObj._id,
                         to: obj.to,
@@ -103,7 +104,7 @@ module.exports = function (io) {
                     });
                     break;
                 }
-                case "Employee": {
+                case "employee": {
                     let roomInRoomList = rooms.find(
                         (room) => room === obj.roomId
                     );
@@ -141,6 +142,20 @@ module.exports = function (io) {
                             to: obj.to,
                             text: obj.msg,
                             roomId: reverseRoomId,
+                        });
+                    } else {
+                        io.to(obj.roomId).emit("newMessage", {
+                            from: empObj._id,
+                            to: obj.to,
+                            text: obj.msg,
+                            createdAt: Date.now(),
+                            roomId: obj.roomId,
+                        });
+                        await Message.create({
+                            from: obj.from,
+                            to: obj.to,
+                            text: obj.msg,
+                            roomId: obj.roomId,
                         });
                     }
                     break;
