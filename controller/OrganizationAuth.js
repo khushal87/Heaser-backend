@@ -88,7 +88,6 @@ exports.createOrganization = async (req, res, next) => {
 
 exports.loginOrganization = async (req, res, next) => {
     const errors = validationResult(req);
-
     const { email, password } = req.body;
     try {
         if (!email || !password) {
@@ -112,7 +111,6 @@ exports.loginOrganization = async (req, res, next) => {
                 }
                 const isMatch = password === organization.password;
                 if (!isMatch) {
-                    console.log(token);
                     const error = new Error(
                         "Validation failed, organization password do not match."
                     );
@@ -127,24 +125,13 @@ exports.loginOrganization = async (req, res, next) => {
                     "HeaseRcredentials",
                     { expiresIn: "1h" }
                 );
-                res.status(200)
-                    .json({
-                        message: "Logged in successfully!",
-                        token: token,
-                        userId: organization._id.toString(),
-                        user: organization,
-                    })
-                    .catch((error) => {
-                        if (!error.statusCode) {
-                            error.statusCode = 500;
-                        }
-                        next(error);
-                    });
-            })
-            .catch((error) => {
-                if (!error.statusCode) {
-                    error.statusCode = 500;
-                }
+                console.log(token);
+                await res.status(200).json({
+                    message: "Logged in successfully!",
+                    token: token,
+                    userId: organization._id.toString(),
+                    user: organization,
+                });
             });
     } catch (error) {
         if (!error.statusCode) {
