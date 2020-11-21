@@ -11,12 +11,15 @@ exports.getEmployeeTasks = async (req, res, next) => {
                 error.status = 404;
                 throw error;
             } else {
-                await Task.find({ to: id, isCompleted: false })
+                await Task.find({ to: id })
                     .populate("from")
                     .then((result) => {
+                        const data = result.filter((item) => {
+                            return new Date() < item.endDate;
+                        });
                         res.status(200).json({
                             message: "Tasks fetched",
-                            tasks: result,
+                            tasks: data,
                         });
                     });
             }
