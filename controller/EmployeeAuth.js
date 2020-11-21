@@ -47,44 +47,45 @@ exports.createEmployee = async (req, res, next) => {
                             .randomBytes(3)
                             .toString("hex");
                         brcrypt.genSalt(5, function (err, salt) {
-                            brcrypt.hash(generatedPassword, salt, function (
-                                err,
-                                hash
-                            ) {
-                                const employee = new Employee({
-                                    name,
-                                    gender,
-                                    username,
-                                    password,
-                                    dob,
-                                    organization,
-                                    email,
-                                    password: hash,
-                                    username: name + "@" + org.name,
-                                });
-                                employee
-                                    .save()
-                                    .then(async (result) => {
-                                        await res.status(200).json({
-                                            message:
-                                                "Employee created successfully",
-                                            organization: result,
-                                        });
-                                        return result;
-                                    })
-                                    .then(async (res) => {
-                                        const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage your company ${res._id} related tasks with ease in your organization with us.
-                \n\n\n.Your login username is - ${res.username}. Your login password is - ${hash}`;
-                                        await sendEmail({
-                                            email: email,
-                                            subject: "Heaser Registration",
-                                            message: message,
-                                        });
-                                    })
-                                    .catch((err) => {
-                                        console.log(err);
+                            brcrypt.hash(
+                                generatedPassword,
+                                salt,
+                                function (err, hash) {
+                                    const employee = new Employee({
+                                        name,
+                                        gender,
+                                        username,
+                                        password,
+                                        dob,
+                                        organization,
+                                        email,
+                                        password: hash,
+                                        username: name + "@" + org.name,
                                     });
-                            });
+                                    employee
+                                        .save()
+                                        .then(async (result) => {
+                                            await res.status(200).json({
+                                                message:
+                                                    "Employee created successfully",
+                                                organization: result,
+                                            });
+                                            return result;
+                                        })
+                                        .then(async (res) => {
+                                            const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage your company ${res._id} related tasks with ease in your organization with us.
+                \n\n\n.Your login username is - ${res.username}. Your login password is - ${hash}`;
+                                            await sendEmail({
+                                                email: email,
+                                                subject: "Heaser Registration",
+                                                message: message,
+                                            });
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        });
+                                }
+                            );
                         });
                     }
                 });

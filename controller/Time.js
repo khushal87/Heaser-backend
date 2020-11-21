@@ -1,6 +1,30 @@
 const Employee = require("../model/Employee");
 const Time = require("../model/Time");
 
+exports.getTime = (req, res, next) => {
+    const empId = req.params.id;
+    Employee.findById(empId)
+        .then((result) => {
+            if (!result) {
+                const error = new Error("No employee exists with this id.");
+                error.statusCode = 401;
+                throw error;
+            }
+            Time.find({ employee: empId }).then((result) => {
+                res.status(200).json({
+                    message: "Employee time fetched",
+                    data: result,
+                });
+            });
+        })
+        .catch((err) => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+};
+
 exports.getTimeForUser = (req, res, next) => {
     const empId = req.params.id;
     Employee.findById(empId)
