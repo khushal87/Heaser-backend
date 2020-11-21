@@ -11,7 +11,7 @@ exports.getEmployeeTasks = async (req, res, next) => {
                 error.status = 404;
                 throw error;
             } else {
-                await Task.find({ to: id })
+                await Task.find({ to: id, isCompleted: false })
                     .populate("from")
                     .then((result) => {
                         res.status(200).json({
