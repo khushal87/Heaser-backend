@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const Task = require("../model/Task");
 const Employee = require("../model/Employee");
+const moment = require("moment");
 
 exports.getEmployeeTasks = async (req, res, next) => {
     const id = req.params.id;
@@ -13,11 +14,14 @@ exports.getEmployeeTasks = async (req, res, next) => {
             } else {
                 await Task.find({ to: id })
                     .populate("from")
-                    .then((result) => {
-                        const data = result.filter((item) => {
-                            return new Date() < item.endDate;
+                    .then(async (result) => {
+                        const data = await result.filter((item) => {
+                            return (
+                                moment(new Date()).format("YYYY-MM-DD") <
+                                moment(item.endDate).format("YYYY-MM-DD")
+                            );
                         });
-                        res.status(200).json({
+                        await res.status(200).json({
                             message: "Tasks fetched",
                             tasks: data,
                         });
