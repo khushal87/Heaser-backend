@@ -14,7 +14,7 @@ exports.getAllNotification = async (req, res, next) => {
             const notifications = await Notification.find({
                 actor: id,
                 type: "employee",
-            }).populate("actor");
+            });
             let uncheckedNotif = 0;
             notifications.map((notif) => {
                 if (
@@ -51,7 +51,7 @@ exports.getOrganizationNotification = async (req, res, next) => {
             const notifications = await Notification.find({
                 actor: id,
                 type: "organization",
-            }).populate("actor");
+            });
             let uncheckedNotif = 0;
             notifications.map((notif) => {
                 if (

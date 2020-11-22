@@ -67,6 +67,7 @@ exports.createLeave = async (req, res, next) => {
                     female_leave_reason,
                     employee: empId,
                 });
+
                 await Notification.create({
                     message: `${result.name}, from your organization has requested a leave`,
                     operation: "Leave",

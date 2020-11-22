@@ -4,9 +4,8 @@ const Schema = mongoose.Schema;
 const notificationSchema = new Schema(
     {
         actor: {
-            type: mongoose.Types.ObjectId,
+            type: String,
             required: true,
-            ref: "Employee" || "Organization",
         },
         operation: { type: String },
         message: { type: String, required: true },
