@@ -17,8 +17,8 @@ exports.getEmployeeTasks = async (req, res, next) => {
                     .then(async (result) => {
                         const data = await result.filter((item) => {
                             return (
-                                moment(new Date()).format("YYYY-MM-DD") <
-                                moment(item.endDate).format("YYYY-MM-DD")
+                                moment(new Date()).format("YYYY-MM-DD hh:mm") <
+                                moment(item.endDate).format("YYYY-MM-DD hh:mm")
                             );
                         });
                         await res.status(200).json({
