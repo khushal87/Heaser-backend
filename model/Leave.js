@@ -30,7 +30,7 @@ const leaveSchema = new Schema({
     },
     accepted_by: {
         type: Schema.Types.ObjectId,
-        ref: "Employee",
+        ref: "Organization",
     },
 });
 

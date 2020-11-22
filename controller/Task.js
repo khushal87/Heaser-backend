@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const Task = require("../model/Task");
 const Employee = require("../model/Employee");
 const moment = require("moment");
+const Notification = require("../model/Notification");
 
 exports.getEmployeeTasks = async (req, res, next) => {
     const id = req.params.id;
@@ -64,8 +65,8 @@ exports.getTasksAllocatedByEmployee = async (req, res, next) => {
 exports.createTask = async (req, res, next) => {
     const { from, to } = req.body;
     await Employee.findById(from)
-        .then(async (result) => {
-            if (!result) {
+        .then(async (resultFrom) => {
+            if (!resultFrom) {
                 const error = new Error("Could not find from employee.");
                 error.status = 404;
                 throw error;
@@ -93,6 +94,11 @@ exports.createTask = async (req, res, next) => {
                             endDate,
                         });
                         await task.save().then(async (result) => {
+                            await Notification.create({
+                                actor: to,
+                                operation: "Task",
+                                message: `You are aloted a new task by ${resultFrom.name}`,
+                            });
                             await res.status(200).json({
                                 message: "Task created successfully",
                                 task: result,

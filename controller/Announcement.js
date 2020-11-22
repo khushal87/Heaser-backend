@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const Organization = require("../model/Organization");
 const Announcement = require("../model/Announcement");
 const Notification = require("../model/Notification");
+const Employee = require("../model/Employee");
 
 exports.getAnnouncementsOfOrganization = (req, res, next) => {
     const id = req.params.id;
@@ -70,11 +71,19 @@ exports.createAnnouncement = (req, res, next) => {
             }
         })
         .then(async (result) => {
-            await Notification.create({
-                message: "You have a new announcement by organization",
-                operation: "Announcement",
-                actor: organization,
-            });
+            await Employee.find({ organization: organization }).then(
+                async (result) => {
+                    result.map((item) => {
+                        return Notification.create({
+                            message:
+                                "You have a new announcement from your organization",
+                            operation: "Announcement",
+                            actor: item._id,
+                        });
+                    });
+                }
+            );
+
             await res.status(200).json({
                 message:
                     "Announcement created Successfully by the organization.",

@@ -6,7 +6,7 @@ const notificationSchema = new Schema(
         actor: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref: "Employee",
+            ref: "Employee" || "Organization",
         },
         operation: { type: String },
         message: { type: String, required: true },

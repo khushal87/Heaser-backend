@@ -2,6 +2,7 @@ const Message = require("../model/Message");
 const chatController = require("../controller/ChatController");
 const Employee = require("../model/Employee");
 const Organization = require("../model/Organization");
+const Notification = require("../model/Notification");
 
 const { rooms } = require("../singleton");
 
@@ -102,6 +103,20 @@ module.exports = function (io) {
                         text: obj.msg,
                         roomId: obj.roomId,
                     });
+                    await Employee.find({ organization: obj.to }).then(
+                        async (result) => {
+                            result.map((item) => {
+                                if (item._id !== obj.from) {
+                                    return Notification.create({
+                                        message: `You have a new message in your Organization Workspace`,
+                                        operation: "Workspace",
+                                        actor: item._id,
+                                    });
+                                }
+                            });
+                        }
+                    );
+
                     break;
                 }
                 case "employee": {
@@ -129,6 +144,11 @@ module.exports = function (io) {
                             text: obj.msg,
                             roomId: obj.roomId,
                         });
+                        await Notification.create({
+                            message: `You have a new message in your Organization from ${obj.from}`,
+                            operation: "Workspace",
+                            actor: obj.to,
+                        });
                     } else if (!!reverseRoomIdInList) {
                         io.to(reverseRoomId).emit("newMessage", {
                             from: empObj._id,
@@ -143,6 +163,11 @@ module.exports = function (io) {
                             text: obj.msg,
                             roomId: reverseRoomId,
                         });
+                        await Notification.create({
+                            message: `You have a new message in your Organization from ${obj.from}`,
+                            operation: "Workspace",
+                            actor: obj.to,
+                        });
                     } else {
                         io.to(obj.roomId).emit("newMessage", {
                             from: empObj._id,
@@ -156,6 +181,11 @@ module.exports = function (io) {
                             to: obj.to,
                             text: obj.msg,
                             roomId: obj.roomId,
+                        });
+                        await Notification.create({
+                            message: `You have a new message in your Organization from ${obj.from}`,
+                            operation: "Workspace",
+                            actor: obj.to,
                         });
                     }
                     break;

@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const Employee = require("../model/Employee");
 const Leave = require("../model/Leave");
 const Notification = require("../model/Notification");
+const Organization = require("../model/Organization");
 
 exports.getLeaves = (req, res, next) => {
     Leave.find()
@@ -83,11 +84,11 @@ exports.createLeave = async (req, res, next) => {
 };
 
 exports.acceptLeave = async (req, res, next) => {
-    const { leaveId, employee } = req.body;
-    await Employee.findById(employee)
-        .then(async (emp) => {
-            if (!emp) {
-                const error = new Error("Could not find employee.");
+    const { leaveId, orgId } = req.body;
+    await Organization.findById(orgId)
+        .then(async (org) => {
+            if (!org) {
+                const error = new Error("Could not find organization.");
                 error.status = 404;
                 throw error;
             } else {
@@ -99,9 +100,9 @@ exports.acceptLeave = async (req, res, next) => {
                             throw error;
                         }
                         result.accepted = true;
-                        result.accepted_by = employee;
+                        result.accepted_by = orgId;
                         await Notification.create({
-                            message: `Your leave was accepted by ${emp.name}-${emp._id}`,
+                            message: `Your leave was accepted by your organization ${org.name}`,
                             operation: "Leave",
                             actor: result.employee,
                         });
