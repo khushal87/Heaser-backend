@@ -67,6 +67,12 @@ exports.createLeave = async (req, res, next) => {
                     female_leave_reason,
                     employee: empId,
                 });
+                await Notification.create({
+                    message: `${result.name}, from your organization has requested a leave`,
+                    operation: "Leave",
+                    type: "organization",
+                    actor: result.organization,
+                });
                 await leave.save().then(async (result) => {
                     await res.status(200).json({
                         message: "Leave submitted successfully",

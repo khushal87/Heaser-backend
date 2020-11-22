@@ -103,6 +103,12 @@ module.exports = function (io) {
                         text: obj.msg,
                         roomId: obj.roomId,
                     });
+                    await Notification.create({
+                        message: `You have a new message in your Organization Workspace`,
+                        operation: "Workspace",
+                        actor: obj.to,
+                        type: "organization",
+                    });
                     await Employee.find({ organization: obj.to }).then(
                         async (result) => {
                             result.map((item) => {

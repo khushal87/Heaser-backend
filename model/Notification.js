@@ -10,6 +10,11 @@ const notificationSchema = new Schema(
         },
         operation: { type: String },
         message: { type: String, required: true },
+        type: {
+            type: String,
+            required: true,
+            default: "employee",
+        },
     },
     { timestamps: true }
 );

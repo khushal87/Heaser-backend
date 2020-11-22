@@ -7,4 +7,9 @@ Router.get(
     notificationController.getAllNotification
 );
 
+Router.get(
+    "/get-organization-notification/:id",
+    notificationController.getOrganizationNotification
+);
+
 module.exports = Router;
