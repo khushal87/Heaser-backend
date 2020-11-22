@@ -2,30 +2,65 @@ const WakaTime = require("../model/Wakatime");
 const Employee = require("../model/Employee");
 const defaults = require("../config/dev");
 const { default: Axios } = require("axios");
+const querystring = require("querystring");
 
 exports.mainWakaTimeFunctionality = (req, res, next) => {
-    const code = req.body.code;
-    const formData = new FormData();
-    // formData.append("clie")
-    const params = {
-        client_id: defaults.WAKATIME_CLIENT_ID,
-        client_secret: defaults.WAKATIME_CLIENT_SECRET,
-        redirect_uri: defaults.WAKATIME_REDIRECT_URI,
-        grant_type: "authorization_code",
-        code: code,
-    };
-    console.log(params);
-    Axios.post("https://wakatime.com/oauth/token", params)
-        .then((result) => {
-            console.log(result);
-        })
-        .catch((err) => {
-            console.log(err.response.data);
-            if (!err.statusCode) {
-                err.statusCode = 500;
+    const { type, code } = req.body;
+    if (type === "first") {
+        const params = {
+            client_id: defaults.WAKATIME_CLIENT_ID,
+            client_secret: defaults.WAKATIME_CLIENT_SECRET,
+            redirect_uri: defaults.WAKATIME_REDIRECT_URI,
+            grant_type: "authorization_code",
+            code: code,
+        };
+        Axios.post(
+            "https://wakatime.com/oauth/token",
+            querystring.stringify(params),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
             }
-            next(err);
-        });
+        )
+            .then((result) => {
+                return res.status(200).json(result.data);
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+                if (!err.statusCode) {
+                    err.statusCode = err.response.status;
+                }
+                next(err);
+            });
+    } else {
+        const params = {
+            client_id: defaults.WAKATIME_CLIENT_ID,
+            client_secret: defaults.WAKATIME_CLIENT_SECRET,
+            redirect_uri: defaults.WAKATIME_REDIRECT_URI,
+            grant_type: "refresh_token",
+            refresh_token: code,
+        };
+        Axios.post(
+            "https://wakatime.com/oauth/token",
+            querystring.stringify(params),
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        )
+            .then((result) => {
+                return res.status(200).json(result.data);
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+                if (!err.statusCode) {
+                    err.statusCode = err.response.status;
+                }
+                next(err);
+            });
+    }
 };
 
 exports.getSpecificEmployeeWakaTimeId = async (req, res, next) => {
