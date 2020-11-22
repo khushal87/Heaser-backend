@@ -8,7 +8,11 @@ const leaveSchema = new Schema({
         ref: "Employee",
         required: [true, "Please enter your employee Id"],
     },
-    date: {
+    startDate: {
+        type: Date,
+        required: true,
+    },
+    endDate: {
         type: Date,
         required: true,
     },

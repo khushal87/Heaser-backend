@@ -55,13 +55,15 @@ exports.createLeave = async (req, res, next) => {
                 throw error;
             } else {
                 const {
-                    date,
+                    startDate,
+                    endDate,
                     reason,
                     is_female,
                     female_leave_reason,
                 } = req.body;
                 const leave = new Leave({
-                    date,
+                    startDate,
+                    endDate,
                     reason,
                     is_female,
                     female_leave_reason,

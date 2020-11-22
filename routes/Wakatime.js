@@ -3,6 +3,7 @@ const Router = express.Router();
 
 const wakatimeController = require("../controller/WakaTime");
 
+Router.get("/main-wakatime", wakatimeController.mainWakaTimeFunctionality);
 Router.get(
     "/get-employee-wakatime-id/:id",
     wakatimeController.getSpecificEmployeeWakaTimeId
