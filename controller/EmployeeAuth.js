@@ -42,6 +42,7 @@ exports.createEmployee = async (req, res, next) => {
                             username,
                             password,
                             dob,
+                            tags,
                         } = req.body;
                         const generatedPassword = crypto
                             .randomBytes(3)
@@ -59,6 +60,7 @@ exports.createEmployee = async (req, res, next) => {
                                         dob,
                                         organization,
                                         email,
+                                        tags,
                                         password: hash,
                                         username: name + "@" + org.name,
                                     });

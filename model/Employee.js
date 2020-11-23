@@ -34,6 +34,10 @@ const employeeSchema = new Schema(
             ref: "Organization",
         },
         lastSeen: { type: String, default: null },
+        tags: {
+            type: Array,
+            required: [true, "Please enter tags"],
+        },
     },
     { timestamps: true }
 );

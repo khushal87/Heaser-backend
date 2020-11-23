@@ -23,6 +23,7 @@ const AnnouncementRoutes = require("./routes/Announcement");
 const ChatRoutes = require("./routes/Chat");
 const NotificationRoutes = require("./routes/Notification");
 const WakaTimeRoutes = require("./routes/Wakatime");
+const CourseRoutes = require("./routes/Courses");
 
 //App initialization
 const app = express();
@@ -102,6 +103,7 @@ app.use("/announcement", AnnouncementRoutes);
 app.use("/chat", ChatRoutes);
 app.use("/notification", NotificationRoutes);
 app.use("/wakatime", WakaTimeRoutes);
+app.use("/courses", CourseRoutes);
 
 app.use(errorHandler);
 
