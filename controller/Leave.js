@@ -45,6 +45,40 @@ exports.getEmployeeLeaves = async (req, res, next) => {
         });
 };
 
+exports.getOrganizationLeaves = async (req, res, next) => {
+    const orgId = req.params.id;
+    await Organization.findById(orgId)
+        .populate("")
+        .then(async (result) => {
+            if (!result) {
+                const error = new Error("Could not find organization.");
+                error.status = 404;
+                throw error;
+            } else {
+                await Leave.find()
+                    .populate("employee")
+                    .then((result) => {
+                        const data = result.filter((item) => {
+                            return (
+                                item.employee.organization == orgId &&
+                                item.accepted === false
+                            );
+                        });
+                        res.status(200).json({
+                            message: "Leaves fetched",
+                            leaves: data,
+                        });
+                    });
+            }
+        })
+        .catch((err) => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+};
+
 exports.createLeave = async (req, res, next) => {
     const empId = req.body.employee;
     await Employee.findById(empId)
