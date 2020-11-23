@@ -10,6 +10,6 @@ module.exports = {
     WAKATIME_CLIENT_ID: "TRCp0dKnVHWPc91II89xckEd",
     WAKATIME_CLIENT_SECRET:
         "sec_ulgjonFt5oGcIDeDJDZvABNfoqCEoiEuoGFjFgObeT28BZCmI8EFW3K5gfvRvgBkDtFcUpDSczsUPxQZ",
-    WAKATIME_REDIRECT_URI: "https://ffreak.herokuapp.com/",
+    WAKATIME_REDIRECT_URI: "http://localhost:3000/task",
     WAKATIME_URI: "https://wakatime.com/api/v1/",
 };
