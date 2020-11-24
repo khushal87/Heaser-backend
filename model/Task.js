@@ -39,6 +39,10 @@ const taskSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        comments: {
+            type: String,
+            default: "",
+        },
     },
     { timestamps: true }
 );

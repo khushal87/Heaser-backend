@@ -14,6 +14,7 @@ exports.getEmployeeTasks = async (req, res, next) => {
                 throw error;
             } else {
                 await Task.find({ to: id })
+                    .sort({ createdAt: -1 })
                     .populate("from")
                     .then(async (result) => {
                         const data = await result.filter((item) => {
@@ -84,6 +85,7 @@ exports.createTask = async (req, res, next) => {
                             description,
                             startDate,
                             endDate,
+                            comments,
                         } = req.body;
                         const task = new Task({
                             from,
@@ -92,6 +94,7 @@ exports.createTask = async (req, res, next) => {
                             description,
                             startDate,
                             endDate,
+                            comments,
                         });
                         await task.save().then(async (result) => {
                             await Notification.create({
@@ -125,12 +128,19 @@ exports.updateTask = async (req, res, next) => {
                 error.status = 404;
                 throw error;
             }
-            const { heading, description, startDate, endDate } = req.body;
+            const {
+                heading,
+                description,
+                startDate,
+                endDate,
+                comments,
+            } = req.body;
 
             heading ? (task.heading = heading) : "";
             description ? (task.description = description) : "";
             startDate ? (task.startDate = startDate) : "";
             endDate ? (task.endDate = endDate) : "";
+            comments ? (task.comments = comments) : "";
             await task.save();
         })
         .then(async (result) => {
@@ -149,6 +159,7 @@ exports.updateTask = async (req, res, next) => {
 
 exports.markTaskAsCompleted = async (req, res, next) => {
     const taskId = req.params.id;
+    const { comments } = req.body;
 
     await Task.findById(taskId)
         .then(async (task) => {
@@ -159,6 +170,7 @@ exports.markTaskAsCompleted = async (req, res, next) => {
             }
 
             task.isCompleted = true;
+            task.comments = comments;
             return task.save();
         })
         .then((result) => {
