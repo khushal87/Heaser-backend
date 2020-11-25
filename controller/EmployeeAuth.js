@@ -63,6 +63,7 @@ exports.createEmployee = async (req, res, next) => {
                                         tags,
                                         password: hash,
                                         username: name + "@" + org.name,
+                                        new: true,
                                     });
                                     employee
                                         .save()

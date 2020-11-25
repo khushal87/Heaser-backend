@@ -38,6 +38,10 @@ const employeeSchema = new Schema(
             type: Array,
             required: [true, "Please enter tags"],
         },
+        new: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

@@ -30,7 +30,9 @@ module.exports = function (io) {
                 case "organization": {
                     messageHistory = await Message.find({
                         roomId: joinParams.roomId,
-                    }).sort({ createdAt: 1 });
+                    })
+                        .populate({ path: "from" })
+                        .sort({ createdAt: 1 });
                     console.log(messageHistory);
                     client.join(joinParams.roomId);
                     io.to(joinParams.roomId).emit(
@@ -91,7 +93,7 @@ module.exports = function (io) {
             switch (obj.type) {
                 case "organization": {
                     io.to(obj.roomId).emit("newMessage", {
-                        from: empObj._id,
+                        from: empObj,
                         to: obj.to,
                         text: obj.msg,
                         createdAt: Date.now(),
@@ -103,12 +105,7 @@ module.exports = function (io) {
                         text: obj.msg,
                         roomId: obj.roomId,
                     });
-                    await Notification.create({
-                        message: `You have a new message in your Organization Workspace`,
-                        operation: "Workspace",
-                        actor: obj.to,
-                        type: "organization",
-                    });
+
                     await Employee.find({ organization: obj.to }).then(
                         async (result) => {
                             result.map((item) => {
@@ -138,7 +135,7 @@ module.exports = function (io) {
                     );
                     if (!!roomInRoomList) {
                         io.to(obj.roomId).emit("newMessage", {
-                            from: empObj._id,
+                            from: empObj,
                             to: obj.to,
                             text: obj.msg,
                             createdAt: Date.now(),
@@ -157,7 +154,7 @@ module.exports = function (io) {
                         });
                     } else if (!!reverseRoomIdInList) {
                         io.to(reverseRoomId).emit("newMessage", {
-                            from: empObj._id,
+                            from: empObj,
                             to: obj.to,
                             text: obj.msg,
                             createdAt: Date.now(),
@@ -176,7 +173,7 @@ module.exports = function (io) {
                         });
                     } else {
                         io.to(obj.roomId).emit("newMessage", {
-                            from: empObj._id,
+                            from: empObj,
                             to: obj.to,
                             text: obj.msg,
                             createdAt: Date.now(),
