@@ -14,7 +14,7 @@ exports.getAllNotification = async (req, res, next) => {
             const notifications = await Notification.find({
                 actor: id,
                 type: "employee",
-            });
+            }).sort({ createdAt: -1 });
             let uncheckedNotif = 0;
             notifications.map((notif) => {
                 if (
