@@ -88,7 +88,7 @@ exports.createWelcomeKit = (req, res, next) => {
                     .then((result) => {
                         Notification.create({
                             message:
-                                "You have a new announcement from your organization",
+                                "Your organization has gifted you a new welcome it. We are gald to have you on board.",
                             operation: "Announcement",
                             actor: employee,
                         });
