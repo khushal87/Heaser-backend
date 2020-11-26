@@ -24,6 +24,7 @@ const ChatRoutes = require("./routes/Chat");
 const NotificationRoutes = require("./routes/Notification");
 const WakaTimeRoutes = require("./routes/Wakatime");
 const CourseRoutes = require("./routes/Courses");
+const WelcomeRoutes = require("./routes/Welcome");
 
 //App initialization
 const app = express();
@@ -104,6 +105,7 @@ app.use("/chat", ChatRoutes);
 app.use("/notification", NotificationRoutes);
 app.use("/wakatime", WakaTimeRoutes);
 app.use("/courses", CourseRoutes);
+app.use("/welcome", WelcomeRoutes);
 
 app.use(errorHandler);
 
