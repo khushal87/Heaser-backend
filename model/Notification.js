@@ -14,6 +14,10 @@ const notificationSchema = new Schema(
             required: true,
             default: "employee",
         },
+        seen: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

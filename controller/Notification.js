@@ -75,3 +75,30 @@ exports.getOrganizationNotification = async (req, res, next) => {
             next(err);
         });
 };
+
+exports.markNotificationSeen = (req, res, next) => {
+    const id = req.params.id;
+    Notification.findById(id)
+        .then((result) => {
+            if (!result) {
+                const error = new Error("Could not find notification.");
+                error.status = 404;
+                throw error;
+            } else {
+                result.seen = true;
+                return result.save();
+            }
+        })
+        .then((result) => {
+            res.status(200).json({
+                message: "Notification seen successfully!",
+                result: result,
+            });
+        })
+        .catch((err) => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+};

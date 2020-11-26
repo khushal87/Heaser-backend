@@ -12,4 +12,9 @@ Router.get(
     notificationController.getOrganizationNotification
 );
 
+Router.put(
+    "/mark-notification-seen/:id",
+    notificationController.markNotificationSeen
+);
+
 module.exports = Router;
