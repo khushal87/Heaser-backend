@@ -18,16 +18,12 @@ exports.getEmployeeTasks = async (req, res, next) => {
                     .populate("from")
                     .then(async (result) => {
                         const data = await result.filter((item) => {
-                            console.log(
-                                item.heading,
-                                moment(new Date()).format("YYYY-MM-DD H:mm"),
-                                moment(item.endDate).format("YYYY-MM-DD H:mm")
-                            );
                             return (
-                                moment(new Date()).format("YYYY-MM-DD H:mm") <
+                                moment(new Date()).format("YYYY-MM-DD H:mm") <=
                                 moment(item.endDate).format("YYYY-MM-DD H:mm")
                             );
                         });
+                        console.log(data.length);
                         await res.status(200).json({
                             message: "Tasks fetched",
                             tasks: data,
