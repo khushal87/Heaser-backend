@@ -91,7 +91,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/discuss", (req, res) => {
-    console.log("hey");
     res.sendFile(path.join(__dirname, "view", "chat.html"));
 });
 
@@ -106,6 +105,9 @@ app.use("/notification", NotificationRoutes);
 app.use("/wakatime", WakaTimeRoutes);
 app.use("/courses", CourseRoutes);
 app.use("/welcome", WelcomeRoutes);
+app.use("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "view", "index.html"));
+});
 
 app.use(errorHandler);
 
