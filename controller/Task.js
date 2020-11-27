@@ -17,6 +17,7 @@ exports.getEmployeeTasks = async (req, res, next) => {
                     .sort({ createdAt: -1 })
                     .populate("from")
                     .then(async (result) => {
+                        console.log(data);
                         const data = await result.filter((item) => {
                             return (
                                 moment(new Date()).format("YYYY-MM-DD H:mm") <=
