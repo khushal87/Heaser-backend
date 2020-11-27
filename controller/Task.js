@@ -18,6 +18,11 @@ exports.getEmployeeTasks = async (req, res, next) => {
                     .populate("from")
                     .then(async (result) => {
                         const data = await result.filter((item) => {
+                            console.log(
+                                item.heading,
+                                moment(new Date()).format("YYYY-MM-DD H:mm"),
+                                moment(item.endDate).format("YYYY-MM-DD H:mm")
+                            );
                             return (
                                 moment(new Date()).format("YYYY-MM-DD H:mm") <
                                 moment(item.endDate).format("YYYY-MM-DD H:mm")
