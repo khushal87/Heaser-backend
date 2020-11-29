@@ -89,11 +89,11 @@ module.exports = function (io) {
         });
 
         client.on("chatMessage", async (obj) => {
-            const empObj = await Employee.findById(obj.from);
             switch (obj.type) {
                 case "organization": {
+                    const orgObj = await Organization.findById(obj.from);
                     io.to(obj.roomId).emit("newMessage", {
-                        from: empObj,
+                        from: orgObj,
                         to: obj.to,
                         text: obj.msg,
                         createdAt: Date.now(),
@@ -123,6 +123,8 @@ module.exports = function (io) {
                     break;
                 }
                 case "employee": {
+                    const empObj = await Employee.findById(obj.from);
+
                     let roomInRoomList = rooms.find(
                         (room) => room === obj.roomId
                     );

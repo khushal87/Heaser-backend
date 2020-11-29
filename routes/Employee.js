@@ -9,7 +9,7 @@ Router.post("/login", employeeAuthController.loginUser);
 Router.put("/change-password/:id", employeeAuthController.changePassword);
 
 Router.get(
-    "/get-employess-by-org-id/:id",
+    "/get-employees-by-org-id/:id",
     employeeController.getSpecificOrganizationsEmployee
 );
 
