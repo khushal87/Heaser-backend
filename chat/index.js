@@ -32,7 +32,10 @@ module.exports = function (io) {
                         roomId: joinParams.roomId,
                     }).sort({ createdAt: 1 });
                     client.join(joinParams.roomId);
-                    io.to(joinParams.roomId).emit("getChatHistory", data);
+                    io.to(joinParams.roomId).emit(
+                        "getChatHistory",
+                        messageHistory
+                    );
                     break;
                 }
                 case "employee": {
