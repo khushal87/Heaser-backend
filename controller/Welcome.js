@@ -59,17 +59,17 @@ exports.getSpecificWelcomeKit = (req, res, next) => {
         });
 };
 
-exports.createWelcomeKit = (req, res, next) => {
+exports.createWelcomeKit = async (req, res, next) => {
     const { employee, organization } = req.body;
-    Organization.findById(organization)
-        .then((result) => {
+    await Organization.findById(organization)
+        .then(async (result) => {
             if (!result) {
                 const error = new Error("Could not find organization.");
                 error.status = 404;
                 throw error;
             } else {
-                Employee.findById(employee)
-                    .then((result) => {
+                await Employee.findById(employee)
+                    .then(async (result) => {
                         if (!result) {
                             const error = new Error("Could not find employee.");
                             error.status = 404;
@@ -86,16 +86,18 @@ exports.createWelcomeKit = (req, res, next) => {
                             return welcome.save();
                         }
                     })
-                    .then((result) => {
+                    .then(async (result) => {
                         Notification.create({
                             message:
                                 "Your organization has gifted you a new welcome it. We are gald to have you on board.",
                             operation: "Announcement",
                             actor: employee,
                         });
-                        res.status(200).json({
+                        const data = await Employee.findById(employee);
+                        await res.status(200).json({
                             message: "New welcome kit added",
                             data: result,
+                            employee: data,
                         });
                     });
             }
