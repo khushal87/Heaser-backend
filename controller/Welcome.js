@@ -93,9 +93,11 @@ exports.createWelcomeKit = (req, res, next) => {
                             operation: "Announcement",
                             actor: employee,
                         });
+                        const data = Employee.findById(employee);
                         res.status(200).json({
                             message: "New welcome kit added",
                             data: result,
+                            employee: data,
                         });
                     });
             }
