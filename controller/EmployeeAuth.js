@@ -28,69 +28,60 @@ exports.createEmployee = async (req, res, next) => {
                 throw error;
             } else {
                 await Employee.find({ email }).then(async (result) => {
-                    if (result.length > 0) {
-                        const error = new Error(
-                            "Validation failed, employee already exists for the email."
-                        );
-                        error.statusCode = 422;
-                        error.data = errors.array();
-                        throw error;
-                    } else {
-                        const {
-                            name,
-                            gender,
-                            username,
-                            password,
-                            dob,
-                            tags,
-                        } = req.body;
-                        const generatedPassword = crypto
-                            .randomBytes(3)
-                            .toString("hex");
-                        brcrypt.genSalt(5, function (err, salt) {
-                            brcrypt.hash(
-                                generatedPassword,
-                                salt,
-                                function (err, hash) {
-                                    const employee = new Employee({
-                                        name,
-                                        gender,
-                                        username,
-                                        password,
-                                        dob,
-                                        organization,
-                                        email,
-                                        tags,
-                                        password: hash,
-                                        username: name + "@" + org.name,
-                                        new: true,
-                                    });
-                                    employee
-                                        .save()
-                                        .then(async (result) => {
-                                            await res.status(200).json({
-                                                message:
-                                                    "Employee created successfully",
-                                                organization: result,
-                                            });
-                                            return result;
-                                        })
-                                        .then(async (res) => {
-                                            const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage your company ${res._id} related tasks with ease in your organization with us.
-                \n\n\n.Your login username is - ${res.username}. Your login password is - ${hash}`;
-                                            await sendEmail({
-                                                email: email,
-                                                subject: "Heaser Registration",
-                                                message: message,
-                                            });
-                                        })
-                                        .catch((err) => {
-                                            console.log(err);
+                    const {
+                        name,
+                        gender,
+                        username,
+                        password,
+                        dob,
+                        tags,
+                    } = req.body;
+                    const generatedPassword = crypto
+                        .randomBytes(3)
+                        .toString("hex");
+                    brcrypt.genSalt(5, function (err, salt) {
+                        brcrypt.hash(
+                            generatedPassword,
+                            salt,
+                            function (err, hash) {
+                                const employee = new Employee({
+                                    name,
+                                    gender,
+                                    username,
+                                    password,
+                                    dob,
+                                    organization,
+                                    email,
+                                    tags,
+                                    password: hash,
+                                    username: name + "@" + org.name,
+                                    new: true,
+                                });
+                                employee
+                                    .save()
+                                    .then(async (result) => {
+                                        await res.status(200).json({
+                                            message:
+                                                "Employee created successfully",
+                                            organization: result,
                                         });
-                                }
-                            );
-                        });
-                    }
+                                        return result;
+                                    })
+                                    .then(async (res) => {
+                                        const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage your company ${res._id} related tasks with ease in your organization with us.
+                \n\n\n.Your login username is - ${res.username}. Your login password is - ${hash}`;
+                                        await sendEmail({
+                                            email: email,
+                                            subject: "Heaser Registration",
+                                            message: message,
+                                        });
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                    });
+                            }
+                        );
+                    });
                 });
             }
         })
