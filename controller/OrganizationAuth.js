@@ -20,53 +20,63 @@ exports.createOrganization = async (req, res, next) => {
     const { email } = req.body;
     await Organization.find({ email })
         .then(async (result) => {
-            const {
-                name,
-                roles,
-                address,
-                country,
-                pincode,
-                phone,
-                email,
-                website,
-            } = req.body;
-            const generatedPassword = crypto.randomBytes(3).toString("hex");
-            brcrypt.genSalt(5, function (err, salt) {
-                brcrypt.hash(generatedPassword, salt, function (err, hash) {
-                    console.log(hash);
-                    const org = new Organization({
-                        name,
-                        email,
-                        roles,
-                        address,
-                        country,
-                        pincode,
-                        phone,
-                        website,
-                        password: hash,
-                    });
-
-                    org.save()
-                        .then(async (result) => {
-                            await res.status(200).json({
-                                message: "Organization created successfully",
-                                organization: result,
-                            });
-                        })
-                        .then(async (res) => {
-                            const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage you HR related tasks with ease in your organization with us.
-                \n\n\n. Your login password is - ${hash}`;
-                            await sendEmail({
-                                email: email,
-                                subject: "Heaser Registration",
-                                message: message,
-                            });
-                        })
-                        .catch((err) => {
-                            console.log(err);
+            if (result.length > 0) {
+                const error = new Error(
+                    "Validation failed, organization already exists for the email."
+                );
+                error.statusCode = 422;
+                error.data = errors.array();
+                throw error;
+            } else {
+                const {
+                    name,
+                    roles,
+                    address,
+                    country,
+                    pincode,
+                    phone,
+                    email,
+                    website,
+                } = req.body;
+                const generatedPassword = crypto.randomBytes(3).toString("hex");
+                brcrypt.genSalt(5, function (err, salt) {
+                    brcrypt.hash(generatedPassword, salt, function (err, hash) {
+                        console.log(hash);
+                        const org = new Organization({
+                            name,
+                            email,
+                            roles,
+                            address,
+                            country,
+                            pincode,
+                            phone,
+                            website,
+                            password: hash,
                         });
+
+                        org.save()
+                            .then(async (result) => {
+                                await res.status(200).json({
+                                    message:
+                                        "Organization created successfully",
+                                    organization: result,
+                                });
+                            })
+                            .then(async (res) => {
+                                const message = `Thank you for registering on HeaseR. We are happy to have you On board.\n Now manage you HR related tasks with ease in your organization with us.
+                \n\n\n. Your login password is - ${hash}`;
+                                await sendEmail({
+                                    email: email,
+                                    subject: "Heaser Registration",
+                                    message: message,
+                                });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    });
                 });
-            });
+            }
         })
         .catch((error) => {
             if (!error.statusCode) {
