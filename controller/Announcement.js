@@ -12,7 +12,7 @@ exports.getAnnouncementsOfOrganization = (req, res, next) => {
             error.status = 404;
             throw error;
         } else {
-            Announcement.find()
+            Announcement.find({ organization: id })
                 .then((result) => {
                     res.status(200).json({
                         message: "Announcements fetched",
