@@ -13,6 +13,7 @@ exports.getOrganizationWelcomeKits = (req, res, next) => {
                 throw error;
             } else {
                 Welcome.find({ organization: id })
+                    .populate("employee")
                     .then((result) => {
                         res.status(200).json({
                             message: "Welcome fetched",
